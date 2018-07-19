@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`About renders as expected 1`] = `
+<div
+  className="about-container"
+>
+  <h1>
+    About
+  </h1>
+  <p>
+    A simple app to explore patterns and best practices using React and Apollo
+  </p>
+</div>
+`;

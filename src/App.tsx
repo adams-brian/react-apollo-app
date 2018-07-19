@@ -1,22 +1,28 @@
 import * as React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+
 import './App.css';
+import About from './common/about';
+import Footer from './common/footer';
+import Nav from './common/nav';
+import Counters from './counters/counters';
+// import Users from './users/components/users';
 
-import logo from './logo.svg';
-
-class App extends React.Component {
-  public render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+export const App = () => (
+  <div className="App d-flex flex-column">
+    <Nav/>
+    <div className="content">
+      <div className="container">
+        <Switch>
+          <Redirect exact={true} from="/" to="/counters"/>
+          <Route path="/counters" component={Counters}/>
+          {/* <Route path="/users" component={Users}/> */}
+          <Route path="/about" component={About}/>
+        </Switch>
       </div>
-    );
-  }
-}
+    </div>
+    <Footer/>
+  </div>
+);
 
 export default App;

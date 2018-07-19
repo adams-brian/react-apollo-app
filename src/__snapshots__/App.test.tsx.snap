@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App renders as expected 1`] = `
+<div
+  className="App d-flex flex-column"
+>
+  <Nav />
+  <div
+    className="content"
+  >
+    <div
+      className="container"
+    >
+      <Switch>
+        <Redirect
+          exact={true}
+          from="/"
+          push={false}
+          to="/counters"
+        />
+        <Route
+          component={[Function]}
+          path="/counters"
+        />
+        <Route
+          component={[Function]}
+          path="/about"
+        />
+      </Switch>
+    </div>
+  </div>
+  <Footer />
+</div>
+`;

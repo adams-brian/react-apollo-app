@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counters component renders as expected 1`] = `
+<div
+  className="counters-container"
+>
+  <h1>
+    Counters
+  </h1>
+</div>
+`;
