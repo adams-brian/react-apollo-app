@@ -24,6 +24,10 @@ exports[`App renders as expected 1`] = `
         />
         <Route
           component={[Function]}
+          path="/users"
+        />
+        <Route
+          component={[Function]}
           path="/about"
         />
       </Switch>
