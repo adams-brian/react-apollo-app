@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { ChildDataProps, compose, graphql, MutateProps } from 'react-apollo';
+import { graphql } from 'react-apollo';
 
 import Counter from './counter';
-import { CountersQuery, ICountersQueryResponse, ISaveCountersVariables, SaveCountersMutation } from './queries';
+import { CountersQuery, ICountersQueryResponse, ISaveCountersResponse, ISaveCountersVariables,
+  SaveCountersMutation, TCountersData, TSaveCountersFunc } from './queries';
 
-class Counters extends React.Component<ChildDataProps<{}, ICountersQueryResponse> & MutateProps<{}, ISaveCountersVariables>, {}> {
+interface IProps {
+  data: TCountersData;
+  saveCounters: TSaveCountersFunc;
+}
+
+class Counters extends React.Component<IProps, {}> {
 
   public render() {
     if (this.props.data.loading) {
@@ -13,7 +19,6 @@ class Counters extends React.Component<ChildDataProps<{}, ICountersQueryResponse
     return (
       <div className="counters-container">
         <h1>Counters</h1>
-        <h3>Count: {this.counters.length}</h3>
         <div className="counter-container">
           {this.counters.map((counter, index) =>
             (<Counter
@@ -38,7 +43,7 @@ class Counters extends React.Component<ChildDataProps<{}, ICountersQueryResponse
   }
 
   private save = (counters: number[]) => {
-    this.props.mutate({
+    this.props.saveCounters({
       optimisticResponse: {
         saveCounters: counters
       },
@@ -66,7 +71,14 @@ class Counters extends React.Component<ChildDataProps<{}, ICountersQueryResponse
   }
 }
 
-export default compose(
-  graphql<{}, ICountersQueryResponse>(CountersQuery),
-  graphql<{}, ICountersQueryResponse, ISaveCountersVariables>(SaveCountersMutation)
-)(Counters)
+export default 
+graphql<{}, ICountersQueryResponse>(CountersQuery)(
+  graphql<{ data: TCountersData }, ISaveCountersResponse, ISaveCountersVariables, { saveCounters: TSaveCountersFunc }> (SaveCountersMutation, {
+    props: (props) => ({
+      data: props.ownProps.data,
+      saveCounters: props.mutate!
+    })
+  })(
+    Counters
+  )
+);
