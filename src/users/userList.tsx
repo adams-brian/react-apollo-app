@@ -2,25 +2,22 @@ import { History } from 'history';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
-import { mapProps } from 'recompose';
+import { branch, mapProps, renderComponent } from 'recompose';
 
 import Loading from '../common/loading';
-import { DeleteUserMutation, IDeleteUserResponse, IDeleteUserVariables,
-  IUsersQueryResponse, TDeleteUserFunc, TUsersData, UsersQuery } from './queries';
+import { DeleteUserMutation, IDeleteUserResponse, IDeleteUserVariables, IUser,
+  IUsersQueryResponse, TDeleteUserFunc, UsersQuery } from './queries';
 import UserListRow from './userListRow';
 
 interface IProps {
+  deleteUser: TDeleteUserFunc;
   history: History;
-  data: TUsersData;
-  deleteUser: TDeleteUserFunc
+  users: IUser[];
 }
 
 class UserList extends React.Component<IProps, {}> {
 
   public render() {
-    if (this.props.data.loading) {
-      return <Loading />;
-    }
     return (
       <div className="users-container">
         <h1 className="users-header">Users</h1>
@@ -33,7 +30,7 @@ class UserList extends React.Component<IProps, {}> {
             </tr>
           </thead>
           <tbody>
-            {this.users.map(user =>
+            {this.props.users.map(user =>
               <UserListRow 
                 key={user.id}
                 user={user}
@@ -50,9 +47,6 @@ class UserList extends React.Component<IProps, {}> {
     );
   }
 
-  private get users() {
-    return this.props.data.users || [];
-  }
   private deleteUser = (id: string) => {
     this.props.deleteUser({
       optimisticResponse: {
@@ -84,20 +78,30 @@ withRouter(
   mapProps(
     (props: RouteComponentProps<{}>) => ({ history: props.history })
   )(
-    graphql<{ history: History }, IUsersQueryResponse, {}, { data: TUsersData, history: History }>(UsersQuery, {
+    graphql<{ history: History }, IUsersQueryResponse, {}, { history: History, loading: boolean, users: IUser[] }>(UsersQuery, {
       props: (props) => ({
-        data: props.data!,
-        history: props.ownProps.history
+        history: props.ownProps.history,
+        loading: props.data === undefined || props.data.loading,
+        users: props.data !== undefined && props.data.users !== undefined ? props.data.users : [],
       })
     })(
-      graphql<{ history: History, data: TUsersData }, IDeleteUserResponse, IDeleteUserVariables, { history: History, data: TUsersData, deleteUser: TDeleteUserFunc }> (DeleteUserMutation, {
-        props: (props) => ({
-          data: props.ownProps.data,
-          deleteUser: props.mutate!,
-          history: props.ownProps.history
-        })
-      })(
-        UserList
+      branch((props: { history: History, loading: boolean, users: IUser[] }) => props.loading,
+        renderComponent(Loading)
+      )(
+        mapProps((props: { history: History, loading: boolean, users: IUser[] }) => ({
+          history: props.history,
+          users: props.users
+        }))(
+          graphql<{ history: History, users: IUser[] }, IDeleteUserResponse, IDeleteUserVariables, IProps> (DeleteUserMutation, {
+            props: (props) => ({
+              deleteUser: props.mutate!,
+              history: props.ownProps.history,
+              users: props.ownProps.users
+            })
+          })(
+            UserList
+          )
+        )
       )
     )
   )

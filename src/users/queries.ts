@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { DataValue, MutationFunc } from 'react-apollo';
+import { MutationFunc } from 'react-apollo';
 
 export interface IUser {
   id: string;
@@ -23,7 +23,6 @@ export const UsersQuery = gql`
 export interface IUsersQueryResponse {
   users: IUserResponse[];
 }
-export type TUsersData = DataValue<IUsersQueryResponse, {}>;
 
 export const UserQuery = gql`
   query user ( $id: ID! ) {
@@ -40,7 +39,6 @@ export interface IUserVariables {
 export interface IUserQueryResponse {
   user: IUserResponse;
 }
-export type TUserData = DataValue<IUserQueryResponse, IUserVariables>;
 
 export const CreateUserMutation = gql`
   mutation createUser( $firstname: String!, $lastname: String! ) {

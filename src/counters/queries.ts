@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { DataValue, MutationFunc } from 'react-apollo';
+import { MutationFunc } from 'react-apollo';
 
 export const CountersQuery = gql`
   query {
@@ -9,7 +9,6 @@ export const CountersQuery = gql`
 export interface ICountersQueryResponse {
   counters: number[]
 }
-export type TCountersData = DataValue<ICountersQueryResponse, {}>;
 
 export const SaveCountersMutation = gql`
   mutation saveCounters( $counters: [Int]! ) {

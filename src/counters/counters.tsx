@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import { branch, mapProps, renderComponent } from 'recompose';
 
+import Loading from '../common/loading';
 import Counter from './counter';
 import { CountersQuery, ICountersQueryResponse, ISaveCountersResponse, ISaveCountersVariables,
-  SaveCountersMutation, TCountersData, TSaveCountersFunc } from './queries';
+  SaveCountersMutation, TSaveCountersFunc } from './queries';
 
 interface IProps {
-  data: TCountersData;
+  counters: number[];
   saveCounters: TSaveCountersFunc;
 }
 
 class Counters extends React.Component<IProps, {}> {
 
   public render() {
-    if (this.props.data.loading) {
-      return <div>Loading...</div>;
-    }
     return (
       <div className="counters-container">
         <h1>Counters</h1>
         <div className="counter-container">
-          {this.counters.map((counter, index) =>
+          {this.props.counters.map((counter, index) =>
             (<Counter
               key={index} /* not ideal, but it works in this case */
               index={index}
@@ -38,10 +37,6 @@ class Counters extends React.Component<IProps, {}> {
     );
   }
 
-  private get counters() {
-    return this.props.data.counters || [];
-  }
-
   private save = (counters: number[]) => {
     this.props.saveCounters({
       optimisticResponse: {
@@ -55,30 +50,43 @@ class Counters extends React.Component<IProps, {}> {
     });
   }
   private increment = (index: number) => {
-    this.save( this.counters.map((c, i) => i === index ? c + 1 : c) );
+    this.save( this.props.counters.map((c, i) => i === index ? c + 1 : c) );
   }
   private decrement = (index: number) => {
-    this.save( this.counters.map((c, i) => i === index ? c - 1 : c) );
+    this.save( this.props.counters.map((c, i) => i === index ? c - 1 : c) );
   }
   private reset = (index: number) => {
-    this.save( this.counters.map((c, i) => i === index ? 0 : c) );
+    this.save( this.props.counters.map((c, i) => i === index ? 0 : c) );
   }
   private remove = (index: number) => {
-    this.save( [...this.counters.slice(0, index), ...this.counters.slice(index+1)] );
+    this.save( [...this.props.counters.slice(0, index), ...this.props.counters.slice(index+1)] );
   }
   private addCounter = () => {
-    this.save( [...this.counters, 0] );
+    this.save( [...this.props.counters, 0] );
   }
 }
 
-export default 
-graphql<{}, ICountersQueryResponse>(CountersQuery)(
-  graphql<{ data: TCountersData }, ISaveCountersResponse, ISaveCountersVariables, { saveCounters: TSaveCountersFunc }> (SaveCountersMutation, {
-    props: (props) => ({
-      data: props.ownProps.data,
-      saveCounters: props.mutate!
-    })
-  })(
-    Counters
+export default
+graphql<{}, ICountersQueryResponse, {}, { counters: number[], loading: boolean }>(CountersQuery, {
+  props: (props) => ({
+    counters: props.data !== undefined && props.data.counters !== undefined ? props.data.counters : [],
+    loading: props.data === undefined || props.data.loading
+  })
+})(
+  branch((props: { counters: number[], loading: boolean }) => props.loading,
+    renderComponent(Loading)
+  )(
+    mapProps((props: { counters: number[], loading: boolean }) => ({
+      counters: props.counters
+    }))(
+      graphql<{ counters: number[] }, ISaveCountersResponse, ISaveCountersVariables, IProps> (SaveCountersMutation, {
+        props: (props) => ({
+          counters: props.ownProps.counters,
+          saveCounters: props.mutate!
+        })
+      })(
+        Counters
+      )
+    )
   )
 );

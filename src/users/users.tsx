@@ -8,7 +8,7 @@ export default function Users() {
   return (
     <Switch>
       <Route exact={true} path="/users" component={UserList}/>
-      {/* <Route exact={true} path="/users/createuser" component={EditUser}/> */}
+      <Route exact={true} path="/users/createuser" component={EditUser}/>
       <Route path="/users/:id" component={EditUser}/>
     </Switch>
   );

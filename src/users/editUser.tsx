@@ -3,26 +3,25 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { RouteComponentProps } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
-import { mapProps } from 'recompose';
-import { branch, renderComponent } from 'recompose';
+import { branch, mapProps, renderComponent } from 'recompose';
 
 import Loading from '../common/loading';
 import { CreateUserMutation, ICreateUserResponse, ICreateUserVariables,
   IUpdateUserResponse, IUser, IUserQueryResponse, IUsersQueryResponse,
-  IUserVariables, TCreateUserFunc, TUpdateUserFunc, TUserData,
+  IUserVariables, TCreateUserFunc, TUpdateUserFunc,
   UpdateUserMutation, UserQuery, UsersQuery } from './queries';
 
 interface IProps {
-  history: History;
-  data: TUserData;
   createUser: TCreateUserFunc;
+  history: History;
   updateUser: TUpdateUserFunc;
+  user: IUser;
 }
 
 export class EditUser extends React.Component<IProps, IUser> {
   constructor(props: IProps) {
     super(props);
-    this.state = props.data.user || { id: '', firstname: '', lastname: ''};
+    this.state = {...props.user};
   }
 
   public render() {
@@ -128,41 +127,46 @@ export class EditUser extends React.Component<IProps, IUser> {
 export default
 withRouter(
   mapProps(
-    (props: RouteComponentProps<{id: string}>) => ({ id: props.match.params.id, history: props.history })
+    (props: RouteComponentProps<{id: string}>) => ({ history: props.history, id: props.match.params.id })
   )(
-    graphql<{ id: string, history: History }, IUserQueryResponse, IUserVariables, { id: string, data: TUserData, history: History }>(UserQuery, {
+    graphql<{ history: History, id: string }, IUserQueryResponse, IUserVariables, { history: History, id: string, loading?: boolean, user?: IUser }>(UserQuery, {
       options: (props) => ({
         variables: {
           id: props.id
         }
       }),
       props: (props) => ({
-        data: props.data! as TUserData, // needs "as" until https://github.com/apollographql/react-apollo/pull/2094 is released
         history: props.ownProps.history,
-        id: props.ownProps.id
-      })
+        id: props.ownProps.id,
+        loading: props.data === undefined || props.data.loading,
+        user: props.data !== undefined && props.data.user !== undefined ? props.data.user : { id: '', firstname: '', lastname: '' }
+      }),
+      skip: (props) => !(props.id && props.id.length > 0)
     })(
-      mapProps(
-        (props: { id: string, data: TUserData, history: History }) => ({ data: props.data, history: props.history })
+      branch((props: { history: History, id: string, loading?: boolean, user?: IUser }) => props.loading !== undefined && props.loading,
+        renderComponent(Loading)
       )(
-        graphql<{ data: TUserData, history: History }, ICreateUserResponse, ICreateUserVariables, {history: History, data: TUserData, createUser: TCreateUserFunc }> (CreateUserMutation, {
-          props: (props) => ({
-            createUser: props.mutate!,
-            data: props.ownProps.data,
-            history: props.ownProps.history
+        mapProps(
+          (props: { history: History, id: string, loading?: boolean, user?: IUser }) => ({
+            history: props.history,
+            user: props.user !== undefined ? props.user : { id: '', firstname: '', lastname: '' }
           })
-        })(
-          graphql<{ history: History, data: TUserData, createUser: TCreateUserFunc }, IUpdateUserResponse, IUser, {history: History, data: TUserData, createUser: TCreateUserFunc, updateUser: TUpdateUserFunc }> (UpdateUserMutation, {
+        )(
+          graphql<{ history: History, user: IUser }, ICreateUserResponse, ICreateUserVariables, { createUser: TCreateUserFunc, history: History, user: IUser }> (CreateUserMutation, {
             props: (props) => ({
-              createUser: props.ownProps.createUser,
-              data: props.ownProps.data,
+              createUser: props.mutate!,
               history: props.ownProps.history,
-              updateUser: props.mutate!
+              user: props.ownProps.user
             })
           })(
-            branch((props: IProps) => props.data.loading,
-              renderComponent(Loading)
-            )(
+            graphql<{ createUser: TCreateUserFunc, history: History, user: IUser }, IUpdateUserResponse, IUser, IProps> (UpdateUserMutation, {
+              props: (props) => ({
+                createUser: props.ownProps.createUser,
+                history: props.ownProps.history,
+                updateUser: props.mutate!,
+                user: props.ownProps.user
+              })
+            })(
               EditUser
             )
           )
