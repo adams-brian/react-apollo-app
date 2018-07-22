@@ -55,7 +55,7 @@ class UserList extends React.Component<IProps, {}> {
     }
     this.props.deleteUser({
       optimisticResponse: {
-        deleteUser: { id, __typename: 'User' }
+        deleteUser: { id }
       },
       update: (store, data) => {
         if (data && data.data && data.data.deleteUser && data.data.deleteUser.id) {

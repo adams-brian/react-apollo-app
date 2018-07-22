@@ -86,7 +86,7 @@ export class EditUser extends React.Component<IProps, IUser> {
     if (this.state.id && this.state.id.length > 0) {
       this.props.updateUser({
         optimisticResponse: {
-          updateUser: { ...this.state, __typename: 'User' }
+          updateUser: { ...this.state }
         },
         variables: { ...this.state }
       });
@@ -94,7 +94,7 @@ export class EditUser extends React.Component<IProps, IUser> {
     else {
       this.props.createUser({
         optimisticResponse: {
-          createUser: { ...this.state, id: CREATE_USER_TEMP_ID, __typename: 'User' }
+          createUser: { ...this.state, id: CREATE_USER_TEMP_ID }
         },
         update: (store, data) => {
           if (data.data) {
@@ -102,7 +102,7 @@ export class EditUser extends React.Component<IProps, IUser> {
             const users = store.readQuery<IUsersQueryResponse>({ query: UsersQuery });
             const list = users && users.users ? users.users : [];
             store.writeQuery({
-              data: { users: [...list, user] },
+              data: { users: [...list, {...user, __typename: 'User'}] },
               query: UsersQuery
             });
           }
