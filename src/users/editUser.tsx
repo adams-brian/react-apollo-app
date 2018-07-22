@@ -6,8 +6,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { branch, mapProps, renderComponent } from 'recompose';
 
 import Loading from '../common/loading';
-import { CreateUserMutation, ICreateUserResponse, ICreateUserVariables,
-  IUpdateUserResponse, IUser, IUserQueryResponse, IUsersQueryResponse,
+import { CREATE_USER_TEMP_ID, CreateUserMutation, ICreateUserResponse,
+  ICreateUserVariables, IUpdateUserResponse, IUser,
+  IUserQueryResponse, IUsersQueryResponse,
   IUserVariables, TCreateUserFunc, TUpdateUserFunc,
   UpdateUserMutation, UserQuery, UsersQuery } from './queries';
 
@@ -87,29 +88,17 @@ export class EditUser extends React.Component<IProps, IUser> {
         optimisticResponse: {
           updateUser: { ...this.state, __typename: 'User' }
         },
-        update: (store, data) => {
-          if (data.data) {
-            const user = data.data.updateUser;
-            store.writeQuery({
-              data: { user },
-              query: UserQuery,
-              variables: { id: user.id }
-            });
-          }
-        },
         variables: { ...this.state }
       });
     }
     else {
       this.props.createUser({
+        optimisticResponse: {
+          createUser: { ...this.state, id: CREATE_USER_TEMP_ID, __typename: 'User' }
+        },
         update: (store, data) => {
           if (data.data) {
             const user = data.data.createUser;
-            store.writeQuery({
-              data: { user },
-              query: UserQuery,
-              variables: { id: user.id }
-            });
             const users = store.readQuery<IUsersQueryResponse>({ query: UsersQuery });
             const list = users && users.users ? users.users : [];
             store.writeQuery({

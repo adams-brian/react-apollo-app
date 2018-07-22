@@ -9,7 +9,14 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    cacheRedirects: {
+      Query: {
+        user: (_, args, { getCacheKey }) =>
+          getCacheKey({ __typename: 'User', id: args.id })
+      },
+    }
+  }),
   uri: 'http://localhost:4000/graphql'
 });
 

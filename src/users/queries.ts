@@ -14,6 +14,7 @@ export interface IUserResponse extends IUser {
 export const UsersQuery = gql`
   query {
     users {
+      __typename
       id
       firstname
       lastname
@@ -27,6 +28,7 @@ export interface IUsersQueryResponse {
 export const UserQuery = gql`
   query user ( $id: ID! ) {
     user( id: $id ) {
+      __typename
       id
       firstname
       lastname
@@ -40,9 +42,11 @@ export interface IUserQueryResponse {
   user: IUserResponse;
 }
 
+export const CREATE_USER_TEMP_ID = "[TEMPORARY ID]";
 export const CreateUserMutation = gql`
   mutation createUser( $firstname: String!, $lastname: String! ) {
     createUser( firstname: $firstname, lastname: $lastname ) {
+      __typename
       id
       firstname
       lastname
@@ -61,6 +65,7 @@ export type TCreateUserFunc = MutationFunc<ICreateUserResponse, ICreateUserVaria
 export const UpdateUserMutation = gql`
   mutation updateUser( $id: ID!, $firstname: String!, $lastname: String! ) {
     updateUser(id: $id, firstname: $firstname, lastname: $lastname) {
+      __typename
       id
       firstname
       lastname
@@ -75,6 +80,7 @@ export type TUpdateUserFunc = MutationFunc<IUpdateUserResponse, IUser>;
 export const DeleteUserMutation = gql`
   mutation deleteUser( $id: ID! ) {
     deleteUser( id: $id ) {
+      __typename
       id
     }
   }

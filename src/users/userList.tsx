@@ -5,7 +5,8 @@ import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { branch, mapProps, renderComponent } from 'recompose';
 
 import Loading from '../common/loading';
-import { DeleteUserMutation, IDeleteUserResponse, IDeleteUserVariables, IUser,
+import { CREATE_USER_TEMP_ID, DeleteUserMutation,
+  IDeleteUserResponse, IDeleteUserVariables, IUser,
   IUsersQueryResponse, TDeleteUserFunc, UsersQuery } from './queries';
 import UserListRow from './userListRow';
 
@@ -48,6 +49,10 @@ class UserList extends React.Component<IProps, {}> {
   }
 
   private deleteUser = (id: string) => {
+    // don't do anything if this is a temp id for a newly created user
+    if(id === CREATE_USER_TEMP_ID) {
+      return;
+    }
     this.props.deleteUser({
       optimisticResponse: {
         deleteUser: { id, __typename: 'User' }
@@ -69,6 +74,10 @@ class UserList extends React.Component<IProps, {}> {
     });
   }
   private editUser = (id: string) => {
+    // don't do anything if this is a temp id for a newly created user
+    if(id === CREATE_USER_TEMP_ID) {
+      return;
+    }
     this.props.history.push('/users/' + id);
   }
 }
