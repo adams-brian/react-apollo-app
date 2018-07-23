@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading should clear the timeout on unmount 1`] = `null`;
+
+exports[`Loading should clear the timeout on unmount 2`] = `null`;
+
+exports[`Loading should render null for 500ms, then loading 1`] = `null`;
+
+exports[`Loading should render null for 500ms, then loading 2`] = `"<div>Loading...</div>"`;
+
+exports[`Loading should render null for 500ms, then loading 3`] = `"<div>Loading...</div>"`;

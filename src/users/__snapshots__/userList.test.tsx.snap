@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserList component deleteUser calls deleteUser and updates UsersQuery 1`] = `
+Object {
+  "optimisticResponse": Object {
+    "deleteUser": Object {
+      "__typename": "User",
+      "id": "123",
+    },
+  },
+  "update": [Function],
+  "variables": Object {
+    "id": "123",
+  },
+}
+`;
+
+exports[`UserList component renders as expected 1`] = `
+<div
+  className="users-container"
+>
+  <h1
+    className="users-header"
+  >
+    Users
+  </h1>
+  <table
+    className="table table-hover"
+  >
+    <thead>
+      <tr>
+        <th>
+          First Name
+        </th>
+        <th>
+          Last Name
+        </th>
+        <th
+          style={
+            Object {
+              "width": "1px",
+            }
+          }
+        />
+      </tr>
+    </thead>
+    <tbody>
+      <UserListRow
+        deleteUser={[Function]}
+        editUser={[Function]}
+        key="123"
+        user={
+          Object {
+            "firstname": "abc",
+            "id": "123",
+            "lastname": "def",
+          }
+        }
+      />
+      <UserListRow
+        deleteUser={[Function]}
+        editUser={[Function]}
+        key="456"
+        user={
+          Object {
+            "firstname": "hij",
+            "id": "456",
+            "lastname": "klm",
+          }
+        }
+      />
+    </tbody>
+  </table>
+  <Link
+    className="create-user"
+    replace={false}
+    to="/users/createuser"
+  >
+    <button
+      className="btn btn-primary"
+      type="button"
+    >
+      Create User
+    </button>
+  </Link>
+</div>
+`;

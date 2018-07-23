@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditUser create user mode calls createUser on submit 1`] = `
+Object {
+  "optimisticResponse": Object {
+    "createUser": Object {
+      "__typename": "User",
+      "firstname": "new",
+      "id": "[TEMPORARY ID]",
+      "lastname": "user",
+    },
+  },
+  "update": [Function],
+  "variables": Object {
+    "firstname": "new",
+    "lastname": "user",
+  },
+}
+`;
+
+exports[`EditUser create user mode renders as expected 1`] = `
+<div
+  className="edit-user"
+>
+  <h1>
+    Create
+     User
+  </h1>
+  <form>
+    <div
+      className="form-group"
+    >
+      <label
+        htmlFor="firstname"
+      >
+        Firstname
+      </label>
+      <input
+        className="form-control"
+        id="firstname"
+        name="firstname"
+        onChange={[Function]}
+        placeholder="Firstname"
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="form-group"
+    >
+      <label
+        htmlFor="lastname"
+      >
+        Lastname
+      </label>
+      <input
+        className="form-control"
+        id="lastname"
+        name="lastname"
+        onChange={[Function]}
+        placeholder="Lastname"
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
+    <div>
+      <Link
+        replace={false}
+        to="/users"
+      >
+        <button
+          className="btn btn-secondary"
+          type="button"
+        >
+          Cancel
+        </button>
+      </Link>
+       
+      <button
+        className="btn btn-primary"
+        disabled={true}
+        onClick={[Function]}
+        type="submit"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`EditUser edit user mode renders as expected 1`] = `
+<div
+  className="edit-user"
+>
+  <h1>
+    Edit
+     User
+  </h1>
+  <form>
+    <div
+      className="form-group"
+    >
+      <label
+        htmlFor="firstname"
+      >
+        Firstname
+      </label>
+      <input
+        className="form-control"
+        id="firstname"
+        name="firstname"
+        onChange={[Function]}
+        placeholder="Firstname"
+        required={true}
+        type="text"
+        value="abc"
+      />
+    </div>
+    <div
+      className="form-group"
+    >
+      <label
+        htmlFor="lastname"
+      >
+        Lastname
+      </label>
+      <input
+        className="form-control"
+        id="lastname"
+        name="lastname"
+        onChange={[Function]}
+        placeholder="Lastname"
+        required={true}
+        type="text"
+        value="def"
+      />
+    </div>
+    <div>
+      <Link
+        replace={false}
+        to="/users"
+      >
+        <button
+          className="btn btn-secondary"
+          type="button"
+        >
+          Cancel
+        </button>
+      </Link>
+       
+      <button
+        className="btn btn-primary"
+        disabled={false}
+        onClick={[Function]}
+        type="submit"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>
+`;

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserListRow renders as expected 1`] = `
+<tr
+  onClick={[Function]}
+>
+  <td>
+    abc
+  </td>
+  <td>
+    def
+  </td>
+  <td>
+    <button
+      onClick={[Function]}
+    >
+      <span
+        className="fa fa-times"
+      />
+    </button>
+  </td>
+</tr>
+`;

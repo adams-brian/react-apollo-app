@@ -16,7 +16,7 @@ interface IProps {
   users: IUser[];
 }
 
-class UserList extends React.Component<IProps, {}> {
+export class UserList extends React.Component<IProps, {}> {
 
   public render() {
     return (
@@ -55,7 +55,7 @@ class UserList extends React.Component<IProps, {}> {
     }
     this.props.deleteUser({
       optimisticResponse: {
-        deleteUser: { id }
+        deleteUser: { id, __typename: 'User' }
       },
       update: (store, data) => {
         if (data && data.data && data.data.deleteUser && data.data.deleteUser.id) {

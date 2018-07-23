@@ -7,6 +7,10 @@ export interface IUser {
   lastname: string;
 }
 
+interface IAddTypename {
+  __typename: string;
+}
+
 export const UsersQuery = gql`
   query {
     users {
@@ -51,7 +55,7 @@ export interface ICreateUserVariables {
   lastname: string;
 }
 export interface ICreateUserResponse {
-  createUser: IUser;
+  createUser: IUser & IAddTypename;
 }
 export type TCreateUserFunc = MutationFunc<ICreateUserResponse, ICreateUserVariables>;
 
@@ -65,7 +69,7 @@ export const UpdateUserMutation = gql`
   }
 `;
 export interface IUpdateUserResponse {
-  updateUser: IUser;
+  updateUser: IUser & IAddTypename;
 }
 export type TUpdateUserFunc = MutationFunc<IUpdateUserResponse, IUser>;
 
@@ -82,6 +86,6 @@ export interface IDeleteUserVariables {
 export interface IDeleteUserResponse {
   deleteUser: {
     id: string
-  };
+  } & IAddTypename;
 }
 export type TDeleteUserFunc = MutationFunc<IDeleteUserResponse, IDeleteUserVariables>;

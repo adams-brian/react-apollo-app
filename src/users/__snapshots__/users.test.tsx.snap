@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Users component renders as expected 1`] = `
+<Switch>
+  <Route
+    component={[Function]}
+    exact={true}
+    path="/users"
+  />
+  <Route
+    component={[Function]}
+    exact={true}
+    path="/users/createuser"
+  />
+  <Route
+    component={[Function]}
+    path="/users/:id"
+  />
+</Switch>
+`;
