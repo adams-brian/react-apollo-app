@@ -12,7 +12,7 @@ interface IProps {
   saveCounters: TSaveCountersFunc;
 }
 
-class Counters extends React.Component<IProps, {}> {
+export class Counters extends React.Component<IProps, {}> {
 
   public render() {
     return (
@@ -43,8 +43,9 @@ class Counters extends React.Component<IProps, {}> {
         saveCounters: counters
       },
       update: (store, data) => {
-        const saveCounters = data && data.data && data.data.saveCounters ? data.data!.saveCounters : [];
-        store.writeQuery({ query: CountersQuery, data: { counters: saveCounters } });
+        if (data && data.data && data.data.saveCounters) {
+          store.writeQuery({ query: CountersQuery, data: { counters: data.data.saveCounters } });
+        }
       },
       variables: { counters }
     });

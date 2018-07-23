@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counters component renders as expected 1`] = `
+<div
+  className="counters-container"
+>
+  <h1>
+    Counters
+  </h1>
+  <div
+    className="counter-container"
+  >
+    <Counter
+      counter={5}
+      decrement={[Function]}
+      increment={[Function]}
+      index={0}
+      key="0"
+      remove={[Function]}
+      reset={[Function]}
+    />
+    <Counter
+      counter={1}
+      decrement={[Function]}
+      increment={[Function]}
+      index={1}
+      key="1"
+      remove={[Function]}
+      reset={[Function]}
+    />
+    <Counter
+      counter={4}
+      decrement={[Function]}
+      increment={[Function]}
+      index={2}
+      key="2"
+      remove={[Function]}
+      reset={[Function]}
+    />
+    <Counter
+      counter={3}
+      decrement={[Function]}
+      increment={[Function]}
+      index={3}
+      key="3"
+      remove={[Function]}
+      reset={[Function]}
+    />
+    <Counter
+      counter={2}
+      decrement={[Function]}
+      increment={[Function]}
+      index={4}
+      key="4"
+      remove={[Function]}
+      reset={[Function]}
+    />
+    <div
+      className="add-counter rounded"
+      onClick={[Function]}
+    >
+      <span
+        className="fa fa-plus"
+      />
+    </div>
+  </div>
+</div>
+`;
