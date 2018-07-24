@@ -113,54 +113,56 @@ export class EditUser extends React.Component<IProps, IUser> {
   }
 }
 
-export default
-withRouter(
-  mapProps(
-    (props: RouteComponentProps<{id: string}>) => ({ history: props.history, id: props.match.params.id })
-  )(
-    graphql<{ history: History, id: string }, IUserQueryResponse, IUserVariables, { history: History, id: string, loading?: boolean, user?: IUser }>(UserQuery, {
-      options: (props) => ({
-        variables: {
-          id: props.id
-        }
-      }),
-      props: (props) => ({
-        history: props.ownProps.history,
-        id: props.ownProps.id,
-        loading: props.data === undefined || props.data.loading,
-        user: props.data !== undefined && props.data.user !== undefined ? props.data.user : { id: '', firstname: '', lastname: '' }
-      }),
-      skip: (props) => !(props.id && props.id.length > 0)
-    })(
-      branch((props: { history: History, id: string, loading?: boolean, user?: IUser }) => props.loading !== undefined && props.loading,
-        renderComponent(Loading)
-      )(
-        mapProps(
-          (props: { history: History, id: string, loading?: boolean, user?: IUser }) => ({
-            history: props.history,
-            user: props.user !== undefined ? props.user : { id: '', firstname: '', lastname: '' }
-          })
+export const generateComponent = () =>
+  withRouter(
+    mapProps(
+      (props: RouteComponentProps<{id: string}>) => ({ history: props.history, id: props.match.params.id })
+    )(
+      graphql<{ history: History, id: string }, IUserQueryResponse, IUserVariables, { history: History, id: string, loading?: boolean, user?: IUser }>(UserQuery, {
+        options: (props) => ({
+          variables: {
+            id: props.id
+          }
+        }),
+        props: (props) => ({
+          history: props.ownProps.history,
+          id: props.ownProps.id,
+          loading: props.data === undefined || props.data.loading === true,
+          user: props.data !== undefined && props.data.user !== undefined ? props.data.user : { id: '', firstname: '', lastname: '' }
+        }),
+        skip: (props) => !(props.id && props.id.length > 0)
+      })(
+        branch((props: { history: History, id: string, loading?: boolean, user?: IUser }) => props.loading !== undefined && props.loading === true,
+          renderComponent(Loading)
         )(
-          graphql<{ history: History, user: IUser }, ICreateUserResponse, ICreateUserVariables, { createUser: TCreateUserFunc, history: History, user: IUser }> (CreateUserMutation, {
-            props: (props) => ({
-              createUser: props.mutate!,
-              history: props.ownProps.history,
-              user: props.ownProps.user
+          mapProps(
+            (props: { history: History, id: string, loading?: boolean, user?: IUser }) => ({
+              history: props.history,
+              user: props.user !== undefined ? props.user : { id: '', firstname: '', lastname: '' }
             })
-          })(
-            graphql<{ createUser: TCreateUserFunc, history: History, user: IUser }, IUpdateUserResponse, IUser, IProps> (UpdateUserMutation, {
+          )(
+            graphql<{ history: History, user: IUser }, ICreateUserResponse, ICreateUserVariables, { createUser: TCreateUserFunc, history: History, user: IUser }> (CreateUserMutation, {
               props: (props) => ({
-                createUser: props.ownProps.createUser,
+                createUser: props.mutate!,
                 history: props.ownProps.history,
-                updateUser: props.mutate!,
                 user: props.ownProps.user
               })
             })(
-              EditUser
+              graphql<{ createUser: TCreateUserFunc, history: History, user: IUser }, IUpdateUserResponse, IUser, IProps> (UpdateUserMutation, {
+                props: (props) => ({
+                  createUser: props.ownProps.createUser,
+                  history: props.ownProps.history,
+                  updateUser: props.mutate!,
+                  user: props.ownProps.user
+                })
+              })(
+                EditUser
+              )
             )
           )
         )
       )
     )
   )
-);
+
+export default generateComponent();

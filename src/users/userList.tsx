@@ -82,36 +82,38 @@ export class UserList extends React.Component<IProps, {}> {
   }
 }
 
-export default
-withRouter(
-  mapProps(
-    (props: RouteComponentProps<{}>) => ({ history: props.history })
-  )(
-    graphql<{ history: History }, IUsersQueryResponse, {}, { history: History, loading: boolean, users: IUser[] }>(UsersQuery, {
-      props: (props) => ({
-        history: props.ownProps.history,
-        loading: props.data === undefined || props.data.loading,
-        users: props.data !== undefined && props.data.users !== undefined ? props.data.users : [],
-      })
-    })(
-      branch((props: { history: History, loading: boolean, users: IUser[] }) => props.loading,
-        renderComponent(Loading)
-      )(
-        mapProps((props: { history: History, loading: boolean, users: IUser[] }) => ({
-          history: props.history,
-          users: props.users
-        }))(
-          graphql<{ history: History, users: IUser[] }, IDeleteUserResponse, IDeleteUserVariables, IProps> (DeleteUserMutation, {
-            props: (props) => ({
-              deleteUser: props.mutate!,
-              history: props.ownProps.history,
-              users: props.ownProps.users
-            })
-          })(
-            UserList
+export const generateComponent = () =>
+  withRouter(
+    mapProps(
+      (props: RouteComponentProps<{}>) => ({ history: props.history })
+    )(
+      graphql<{ history: History }, IUsersQueryResponse, {}, { history: History, loading: boolean, users: IUser[] }>(UsersQuery, {
+        props: (props) => ({
+          history: props.ownProps.history,
+          loading: props.data === undefined || props.data.loading === true,
+          users: props.data !== undefined && props.data.users !== undefined ? props.data.users : [],
+        })
+      })(
+        branch((props: { history: History, loading: boolean, users: IUser[] }) => props.loading === true,
+          renderComponent(Loading)
+        )(
+          mapProps((props: { history: History, loading: boolean, users: IUser[] }) => ({
+            history: props.history,
+            users: props.users
+          }))(
+            graphql<{ history: History, users: IUser[] }, IDeleteUserResponse, IDeleteUserVariables, IProps> (DeleteUserMutation, {
+              props: (props) => ({
+                deleteUser: props.mutate!,
+                history: props.ownProps.history,
+                users: props.ownProps.users
+              })
+            })(
+              UserList
+            )
           )
         )
       )
     )
   )
-);
+
+export default generateComponent();

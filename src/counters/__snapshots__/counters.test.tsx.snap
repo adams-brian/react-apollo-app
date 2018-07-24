@@ -66,3 +66,46 @@ exports[`Counters component renders as expected 1`] = `
   </div>
 </div>
 `;
+
+exports[`Counters connection connects as expected 1`] = `
+Object {
+  "callArgs": Array [
+    Object {
+      "callArgs": Array [
+        Object {
+          "callArgs": Array [
+            Object {
+              "callArgs": Array [
+                [Function],
+              ],
+              "name": "graphql",
+              "setupArgs": Array [
+                "SaveCountersMutation",
+                Object {
+                  "props": [Function],
+                },
+              ],
+            },
+          ],
+          "name": "mapProps",
+          "setupArgs": Array [
+            [Function],
+          ],
+        },
+      ],
+      "name": "branch",
+      "setupArgs": Array [
+        [Function],
+        "renderComponent(Loading)",
+      ],
+    },
+  ],
+  "name": "graphql",
+  "setupArgs": Array [
+    "CountersQuery",
+    Object {
+      "props": [Function],
+    },
+  ],
+}
+`;

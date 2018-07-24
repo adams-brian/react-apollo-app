@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EditUser create user mode calls createUser on submit 1`] = `
+exports[`EditUser component create user mode calls createUser on submit 1`] = `
 Object {
   "optimisticResponse": Object {
     "createUser": Object {
@@ -18,7 +18,7 @@ Object {
 }
 `;
 
-exports[`EditUser create user mode renders as expected 1`] = `
+exports[`EditUser component create user mode renders as expected 1`] = `
 <div
   className="edit-user"
 >
@@ -91,7 +91,7 @@ exports[`EditUser create user mode renders as expected 1`] = `
 </div>
 `;
 
-exports[`EditUser edit user mode renders as expected 1`] = `
+exports[`EditUser component edit user mode renders as expected 1`] = `
 <div
   className="edit-user"
 >
@@ -162,4 +162,74 @@ exports[`EditUser edit user mode renders as expected 1`] = `
     </div>
   </form>
 </div>
+`;
+
+exports[`EditUser connection connects as expected 1`] = `
+Object {
+  "callArgs": Array [
+    Object {
+      "callArgs": Array [
+        Object {
+          "callArgs": Array [
+            Object {
+              "callArgs": Array [
+                Object {
+                  "callArgs": Array [
+                    Object {
+                      "callArgs": Array [
+                        Object {
+                          "callArgs": Array [
+                            [Function],
+                          ],
+                          "name": "graphql",
+                          "setupArgs": Array [
+                            "UpdateUserMutation",
+                            Object {
+                              "props": [Function],
+                            },
+                          ],
+                        },
+                      ],
+                      "name": "graphql",
+                      "setupArgs": Array [
+                        "CreateUserMutation",
+                        Object {
+                          "props": [Function],
+                        },
+                      ],
+                    },
+                  ],
+                  "name": "mapProps",
+                  "setupArgs": Array [
+                    [Function],
+                  ],
+                },
+              ],
+              "name": "branch",
+              "setupArgs": Array [
+                [Function],
+                "renderComponent(Loading)",
+              ],
+            },
+          ],
+          "name": "graphql",
+          "setupArgs": Array [
+            "UserQuery",
+            Object {
+              "options": [Function],
+              "props": [Function],
+              "skip": [Function],
+            },
+          ],
+        },
+      ],
+      "name": "mapProps",
+      "setupArgs": Array [
+        [Function],
+      ],
+    },
+  ],
+  "name": "withRouter",
+  "setupArgs": Array [],
+}
 `;

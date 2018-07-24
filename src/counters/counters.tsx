@@ -67,27 +67,29 @@ export class Counters extends React.Component<IProps, {}> {
   }
 }
 
-export default
-graphql<{}, ICountersQueryResponse, {}, { counters: number[], loading: boolean }>(CountersQuery, {
-  props: (props) => ({
-    counters: props.data !== undefined && props.data.counters !== undefined ? props.data.counters : [],
-    loading: props.data === undefined || props.data.loading
-  })
-})(
-  branch((props: { counters: number[], loading: boolean }) => props.loading,
-    renderComponent(Loading)
-  )(
-    mapProps((props: { counters: number[], loading: boolean }) => ({
-      counters: props.counters
-    }))(
-      graphql<{ counters: number[] }, ISaveCountersResponse, ISaveCountersVariables, IProps> (SaveCountersMutation, {
-        props: (props) => ({
-          counters: props.ownProps.counters,
-          saveCounters: props.mutate!
-        })
-      })(
-        Counters
+export const generateComponent = () =>
+  graphql<{}, ICountersQueryResponse, {}, { counters: number[], loading: boolean }>(CountersQuery, {
+    props: (props) => ({
+      counters: props.data !== undefined && props.data.counters !== undefined ? props.data.counters : [],
+      loading: props.data === undefined || props.data.loading === true
+    })
+  })(
+    branch((props: { counters: number[], loading: boolean }) => props.loading === true,
+      renderComponent(Loading)
+    )(
+      mapProps((props: { counters: number[], loading: boolean }) => ({
+        counters: props.counters
+      }))(
+        graphql<{ counters: number[] }, ISaveCountersResponse, ISaveCountersVariables, IProps> (SaveCountersMutation, {
+          props: (props) => ({
+            counters: props.ownProps.counters,
+            saveCounters: props.mutate!
+          })
+        })(
+          Counters
+        )
       )
     )
   )
-);
+
+export default generateComponent();
